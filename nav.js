@@ -1,16 +1,11 @@
 (function(d3) {
-	var diameter = 960,
-		format = d3.format(",d"),
-		color = d3.scale.category20c();
-
-	var bubble = d3.layout.pack()
-		.sort(null)
-		.size([diameter, diameter])
-		.padding(1.5);
+	var width = 200;
+	var height = 200;
 
 	var svg = d3.select("body").append("svg")
-		.attr("width", diameter)
-		.attr("height", diameter)
+		.attr("width", width)
+		.attr("height", height)
+		.style("background", "orange")
 		.attr("class", "bubble");
 
 	function drawCircle(x, y, radius, opts) {
@@ -47,12 +42,13 @@
 		circle.style("cursor", "pointer");
 
 		var text = svg.append("text")
-			.attr("x", 80)
-			.attr("y", 80)
+			.attr("x", 68)
+			.attr("y", 100)
+			.attr("text-anchor", "middle")
 			.text(opts.title)
 			.attr("font-family", "sans-serif")
-			.attr("font-size", "20px")
-			.attr("fill", "red")
+			.attr("font-size", "16px")
+			.attr("fill", "black")
 			.style("opacity", 0);
 
 		circle.on("mouseover", function() {
@@ -68,16 +64,54 @@
 		});
 	}
 
-	drawCircle(75, 80, 50, {fill: "green"});
-	drawCircle(75, 80, 60, {stroke: {width: 2, color: "black"}});
+	// drawCircle(75, 80, 75, {fill: "green"});
+	drawCircle(85, 95, 80, {stroke: {width: 2, color: "black"}});
+	drawCircle(75, 95, 65, {stroke: {width: 2, color: "black"}});
+	drawCircle(68, 95, 53, {fill: "green"});
+
+	makeNav({
+		title: "Contact",
+		x: 105,
+		y: 35,
+		r: 10,
+		fill: "green",
+		hover: {"color": "blue"}
+	});
+
+	makeNav({
+		title: "Biography",
+		x: 75,
+		y: 30,
+		r: 10,
+		fill: "green",
+		hover: {"color": "blue"}
+	});
 
 	makeNav({
 		title: "Clients",
-		x: 100,
-		y: 10,
-		r: 30,
+		x: 160,
+		y: 125,
+		r: 15,
 		fill: "red",
 		hover: {"color": "blue"}
+	});
+
+	makeNav({
+		title: "Resources",
+		x: 165,
+		y: 83,
+		r: 15,
+		fill: "red",
+		hover: {"color": "pink"}
+	});
+
+	makeNav({
+		title: "Services",
+		x: 150,
+		y: 45,
+		r: 15,
+		fill: "blue",
+		hover: {"color": "pink"}
 	});
 
 })(d3);

@@ -27,17 +27,21 @@
 			circle.attr('stroke', opts.stroke.color);
 		}
 
-		return circle;
+		return {node: node, circle: circle};
 	}
 
 	function makeNav(opts) {
-		var bigCircle = drawCircle(opts.x, opts.y, opts.r + 5, {stroke: {width: 1, color: "black"}});
+		opts.hover.circle = opts.hover.circle || true;
+
+		var bigCircle = drawCircle(opts.x, opts.y, opts.r + 5, {stroke: {width: 1, color: "black"}}).circle;
 
 		bigCircle.style("display", "none");
 
-		var circle = drawCircle(opts.x, opts.y, opts.r, {
+		var circular = drawCircle(opts.x, opts.y, opts.r, {
 			fill: opts.fill
 		});
+
+		var circle = circular.circle;
 
 		circle.style("cursor", "pointer");
 
@@ -49,16 +53,22 @@
 			.attr("font-family", "sans-serif")
 			.attr("font-size", "16px")
 			.attr("fill", "black")
-			.style("opacity", 0);
+			.style("opacity", 0)
+			.style("display", "none");
 
-		circle.on("mouseover", function() {
-			text.transition().style("opacity", 1);
+		function hover() {
+			text.style("display","block").transition().style("opacity", 1);
 			circle.transition().style("fill", opts.hover.color);
-			bigCircle.transition().style("display", "block");
-		});
+			if (opts.hover.circle) {
+				bigCircle.transition().style("display", "block");
+			}
+		}
+
+		circle.on("mouseover", hover);
+		text.on("mouseover", hover);
 
 		circle.on("mouseout", function() {
-			text.transition().style("opacity", 0);
+			text.style("display","none");
 			circle.transition().style("fill", opts.fill);
 			bigCircle.transition().style("display", "none");
 		});
@@ -67,7 +77,16 @@
 	// drawCircle(75, 80, 75, {fill: "green"});
 	drawCircle(85, 95, 80, {stroke: {width: 2, color: "black"}});
 	drawCircle(75, 95, 65, {stroke: {width: 2, color: "black"}});
-	drawCircle(68, 95, 53, {fill: "green"});
+
+	makeNav({
+		title: "Home",
+		type: "home",
+		x: 68,
+		y: 95,
+		r: 53,
+		fill: "green",
+		hover: {"color": "green", circle: false}
+	});
 
 	makeNav({
 		title: "Contact",

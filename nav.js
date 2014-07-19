@@ -1,12 +1,10 @@
 (function(d3) {
-	var width = 200;
-	var height = 200;
+	var width = 250;
+	var height = 250;
 
 	var svg = d3.select("body").append("svg")
 		.attr("width", width)
-		.attr("height", height)
-		.style("background", "orange")
-		.attr("class", "bubble");
+		.attr("height", height);
 
 	function drawCircle(x, y, radius, opts) {
 		var node = svg.append("g")
@@ -33,6 +31,8 @@
 	function makeNav(opts) {
 		opts.hover.circle = opts.hover.circle || false;
 
+		var active = opts.active || document.location.href.indexOf(opts.link) > -1;
+
 		var image;
 
 		var bigCircle = drawCircle(opts.x, opts.y, opts.r + 5, {stroke: {width: 1, color: "black"}}).circle;
@@ -57,8 +57,8 @@
 		circle.style("cursor", "pointer");
 
 		var text = svg.append("text")
-			.attr("x", 68)
-			.attr("y", 100)
+			.attr("x", 76)
+			.attr("y", 110)
 			.attr("text-anchor", "middle")
 			.text(opts.title)
 			.attr("font-family", "sans-serif")
@@ -67,14 +67,24 @@
 			.style("opacity", 0)
 			.style("display", "none");
 
-		function hover() {
-			// text.style("display","block").transition().style("opacity", 1);
-			// circle.transition().style("fill", opts.hover.color);
+		function hover(onActive) {
+			if (!onActive) {
+				text.style("display","block").transition().style("opacity", 1);
+			}
+
+			if (opts.hover.color) {
+				circle.transition().style("fill", opts.hover.color);
+			}
+
 			if (opts.hover.circle) {
 				bigCircle.transition().style("display", "block");
 			}
 
 			if (opts.hover.image) {
+				image.attr('width', opts.r * 2.4);
+				image.attr('height', opts.r * 2.4);
+				image.attr('x', opts.x - opts.r * 1.2);
+				image.attr('y', opts.y - opts.r * 1.2);
 				image.attr("xlink:href", opts.hover.image);
 			}
 		}
@@ -82,74 +92,96 @@
 		circle.on("mouseover", hover);
 		text.on("mouseover", hover);
 
+		if (active) {
+			hover(true);
+		}
+
 		circle.on("mouseout", function() {
 			text.style("display","none");
-			circle.transition().style("fill", opts.fill);
-			bigCircle.transition().style("display", "none");
 
-			if (opts.hover.image) {
-				image.attr("xlink:href", opts.image);
+			if (!active) {
+				circle.transition().style("fill", opts.fill);
+				bigCircle.transition().style("display", "none");
+
+				if (opts.hover.image) {
+					image.attr('width', opts.r * 2);
+					image.attr('height', opts.r * 2);
+					image.attr('x', opts.x - opts.r);
+					image.attr('y', opts.y - opts.r);
+					image.attr("xlink:href", opts.image);
+				}
 			}
 		});
+
+		function click() {
+			document.location.href = opts.link;
+		}
+
+		if (opts.link) {
+			circle.on("click", click);
+			text.on("click", click);
+		}
 	}
 
 	// drawCircle(75, 80, 75, {fill: "green"});
-	drawCircle(85, 95, 80, {stroke: {width: 2, color: "black"}});
-	drawCircle(75, 95, 65, {stroke: {width: 2, color: "black"}});
+	drawCircle(105, 105, 90, {stroke: {width: 1, color: "black"}});
+	drawCircle(90, 105, 70, {stroke: {width: 1, color: "black"}});
 
 	makeNav({
 		title: "Home",
 		type: "home",
-		x: 68,
-		y: 95,
+		link: "index.html",
+		x: 76,
+		y: 105,
 		r: 53,
-		fill: "green",
-		hover: {"color": "green"}
-	});
-
-	makeNav({
-		title: "Contact",
-		x: 105,
-		y: 35,
-		r: 10,
-		fill: "green",
-		hover: {"color": "blue"}
+		fill: "98ca3d",
+		hover: {"color": "98ca3d"}
 	});
 
 	makeNav({
 		title: "Biography",
-		x: 75,
-		y: 30,
-		r: 10,
+		x: 105,
+		y: 40,
+		r: 12,
 		image: "images/bio-1.png",
 		hover: {image: "images/bio-2.png"}
 	});
 
 	makeNav({
-		title: "Clients",
-		x: 160,
-		y: 125,
-		r: 15,
-		fill: "red",
-		hover: {"color": "blue"}
+		title: "Contact",
+		x: 130,
+		y: 50,
+		r: 12,
+		image: "images/contact-1.png",
+		hover: {image: "images/contact-2.png"}
 	});
 
 	makeNav({
-		title: "Resources",
-		x: 165,
-		y: 83,
-		r: 15,
-		fill: "red",
-		hover: {"color": "pink"}
+		title: "Clients",
+		link: "clients.html",
+		x: 178,
+		y: 155,
+		r: 25,
+		image: "images/clients-1.png",
+		hover: {image: "images/clients-2.png"}
 	});
 
 	makeNav({
 		title: "Services",
-		x: 150,
-		y: 45,
-		r: 15,
-		fill: "blue",
-		hover: {"color": "pink"}
+		x: 178,
+		y: 55,
+		r: 25,
+		image: "images/services-1.png",
+		hover: {image: "images/services-2.png"}
+	});
+
+	makeNav({
+		title: "Resources",
+		x: 195,
+		y: 105,
+		r: 25,
+		image: "images/resources-1.png",
+		hover: {image: "images/resources-2.png"}
 	});
 
 })(d3);

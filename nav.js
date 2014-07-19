@@ -31,11 +31,22 @@
 	}
 
 	function makeNav(opts) {
-		opts.hover.circle = opts.hover.circle || true;
+		opts.hover.circle = opts.hover.circle || false;
+
+		var image;
 
 		var bigCircle = drawCircle(opts.x, opts.y, opts.r + 5, {stroke: {width: 1, color: "black"}}).circle;
 
 		bigCircle.style("display", "none");
+
+		if (opts.image) {
+			image = svg.append("svg:image")
+				.attr('x', opts.x - opts.r)
+				.attr('y', opts.y - opts.r)
+				.attr('width', opts.r * 2)
+				.attr('height', opts.r * 2)
+				.attr("xlink:href", opts.image);
+		}
 
 		var circular = drawCircle(opts.x, opts.y, opts.r, {
 			fill: opts.fill
@@ -57,10 +68,14 @@
 			.style("display", "none");
 
 		function hover() {
-			text.style("display","block").transition().style("opacity", 1);
-			circle.transition().style("fill", opts.hover.color);
+			// text.style("display","block").transition().style("opacity", 1);
+			// circle.transition().style("fill", opts.hover.color);
 			if (opts.hover.circle) {
 				bigCircle.transition().style("display", "block");
+			}
+
+			if (opts.hover.image) {
+				image.attr("xlink:href", opts.hover.image);
 			}
 		}
 
@@ -71,6 +86,10 @@
 			text.style("display","none");
 			circle.transition().style("fill", opts.fill);
 			bigCircle.transition().style("display", "none");
+
+			if (opts.hover.image) {
+				image.attr("xlink:href", opts.image);
+			}
 		});
 	}
 
@@ -85,7 +104,7 @@
 		y: 95,
 		r: 53,
 		fill: "green",
-		hover: {"color": "green", circle: false}
+		hover: {"color": "green"}
 	});
 
 	makeNav({
@@ -102,8 +121,8 @@
 		x: 75,
 		y: 30,
 		r: 10,
-		fill: "green",
-		hover: {"color": "blue"}
+		image: "images/bio-1.png",
+		hover: {image: "images/bio-2.png"}
 	});
 
 	makeNav({

@@ -67,6 +67,10 @@
 			.style("opacity", 0)
 			.style("display", "none");
 
+		if (text !== undefined) {
+			text.style("cursor", "pointer");
+		}
+
 		function hover(onActive) {
 			if (!onActive) {
 				text.style("display","block").transition().style("opacity", 1);

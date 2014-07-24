@@ -81,10 +81,6 @@
 			}
 
 			if (opts.hover.image) {
-				image.attr('width', opts.r * 2.4);
-				image.attr('height', opts.r * 2.4);
-				image.attr('x', opts.x - opts.r * 1.2);
-				image.attr('y', opts.y - opts.r * 1.2);
 				image.attr("xlink:href", opts.hover.image);
 			}
 		}
@@ -104,10 +100,6 @@
 				bigCircle.transition().style("display", "none");
 
 				if (opts.hover.image) {
-					image.attr('width', opts.r * 2);
-					image.attr('height', opts.r * 2);
-					image.attr('x', opts.x - opts.r);
-					image.attr('y', opts.y - opts.r);
 					image.attr("xlink:href", opts.image);
 				}
 			}
